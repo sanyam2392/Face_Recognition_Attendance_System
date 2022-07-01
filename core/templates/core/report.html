@@ -1,0 +1,159 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block content %}
+
+
+
+<!DOCTYPE html>
+<div class="container emp-profile">
+<div style="background-color: white;">
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<body>
+
+<canvas id="myChart" style="margin-left:20%;width:100%;max-width:600px;z-index: index 5;background-color: white;border-radius: 2%;padding:3%;"></canvas>
+
+<script >
+var xValues = ["Number of the students Present", "Number of the students Absent"];
+var yValues = [{{total_students_present}},{{total_students_absent}}];
+var barColors = [
+  "#b91d47",
+  "#00aba9",
+];
+
+new Chart("myChart", {
+  type: "pie",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: "Attendance Report"
+    }
+  }
+});
+</script>
+
+<div >
+<hr >
+<ul  class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="present-tab" data-toggle="tab" href="#present" role="tab"
+            aria-controls="home" aria-selected="true">Present</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="absent-tab" data-toggle="tab" href="#absent" role="tab" aria-controls="profile"
+            aria-selected="false">Absent</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="contact"
+            aria-selected="false">History</a>
+    </li>
+  
+</ul>
+
+<div class="tab-content" id="myTabContent">
+    <br>
+    <div class="tab-pane fade show active" id="present" role="tabpanel" aria-labelledby="home-tab">
+
+        <table class="table table-striped ">
+            <thead>
+                <tr>
+                    <th scope="col"> </th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Entry Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in present %}
+                <tr>
+                    <th scope="row">-</th>
+                    <td>{{profile.first_name}} {{profile.last_name}}</td>
+                    <td>{{profile.status}}</td>
+                    <td>{{profile.updated |date:"h:iA"}}</td>
+                </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+        <a href="{% url 'reset' %}"><button type="button" class="btn btn-outline-secondary">Reset</button></a>
+        <a href="{% url 'index' %}"><button type="button" class="btn btn-outline-primary">Refresh</button></a>
+
+    </div>
+
+    <div class="tab-pane fade" id="absent" role="tabpanel" aria-labelledby="profile-tab">
+        <table class="table table-striped ">
+            <thead>
+                <tr>
+                    <th scope="col"> </th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Shift Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in absent %}
+                <tr>
+                    <th scope="row">-</th>
+                    <td>{{profile.first_name}} {{profile.last_name}}</td>
+                    <td>{{profile.status}}</td>
+                    <td>{{profile.shift}}</td>
+                </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="contact-tab">
+        <table class="table table-striped ">
+            <thead>
+                <tr>
+                    <th scope="col"> </th>
+                    <th scope="col">Profile ID</th>
+                    <th scope="col">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for face in scanned %}
+                <tr>
+                    <th scope="row">-</th>
+                    <td>{{face.last_face}}</td>
+                    <td>{{face.date}}</td>
+                    
+                </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+        <a href="{% url 'clear_history' %}"><button type="button" class="btn btn-outline-secondary">Clear History</button></a>
+    </div>
+
+</div>
+
+
+
+
+</div>
+</div>
+</div>
+
+</script>
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+{% endblock content %}
